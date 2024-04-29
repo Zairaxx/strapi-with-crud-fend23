@@ -6,7 +6,11 @@ let getProduct = async () => {
     // console.log(json);
 
     //GET-request (with axios);
-    let response = await axios.get("http://localhost:1337/api/products")
+    let response = await axios.get("http://localhost:1337/api/products", {
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+      }
+    })
     console.log(response.data);
 }
 
@@ -38,10 +42,15 @@ let createProduct = async () => {
   let response = await axios.post("http://localhost:1337/api/products", {
     //request body
     data: { 
-        price: 199,
-        name: "Headset 2",
+        price: 20,
+        name: "Kanelbullar",
     },
-    }     
+    },  {
+      //config
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+      }
+    }   
   );
   console.log(response);
 }
@@ -67,12 +76,16 @@ let editProduct = async () => {
 //   console.log("Edited data", response, data);
   //Axios
   await axios.put(
-    `http://localhost:1337/api/products/2`,
+    `http://localhost:1337/api/products/15`,
     {
       data: {
-        price: 999,
+        price: 59,
       },
-    },
+    }, {
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}` 
+      }
+    }
    );
 }
 
@@ -84,7 +97,26 @@ let deleteProduct = async () => {
     //     method:"DELETE"
     // })
     //With Axios
-    await axios.delete("http://localhost:1337/api/products/12");
+    await axios.delete("http://localhost:1337/api/products/15", {
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+      }
+    });
 }
 
-deleteProduct();
+// deleteProduct();
+
+//AUTHENTICATION
+
+//Login
+
+let login = async () => {
+ let response = await axios.post('http://localhost:1337/api/auth/local', {
+    identifier: 'TestUser',
+    password: 'Test1234',
+  });
+  sessionStorage.setItem("token", response.data.jwt);
+}
+
+login()
+
